@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <rosparam file="$(find hexapod)/config/hexapod.yaml" command="load"/>
+
+  <node name="robot_state_publisher_hexapod" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <param name="publish_frequency" type="double" value="20.0"/>
+    <param name="ignore_timestamp" type="bool" value="true"/>
+    <param name="tf_prefix" type="string" value="hexapod"/>
+    <remap from="/joint_states" to="/hexapod/joint_states"/>
+  </node>
+
+  <node
+    name="controller_spawner"
+    pkg="controller_manager"
+    type="spawner"
+    respawn="false"
+    output="screen"
+    args="--namespace=/hexapod joint_state_controller m11_position_controller m12_position_controller m13_position_controller m21_position_controller m22_position_controller m23_position_controller m31_position_controller m32_position_controller m33_position_controller m41_position_controller m42_position_controller m43_position_controller m51_position_controller m52_position_controller m53_position_controller m61_position_controller m62_position_controller m63_position_controller --shutdown-timeout 3"></node>
+
+</launch>

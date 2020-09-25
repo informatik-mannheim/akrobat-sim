@@ -1,0 +1,233 @@
+		cout << "X" << endl;
+		double x;
+		double y;
+		double z;
+
+		cin >> x;
+		
+		cout << "Y" << endl;
+		cin >> y;
+		
+		cout << "Z" << endl;
+		cin >> z;
+		
+		cout << "result" << endl;
+
+		std::vector<double> xx = akrobat.inverseKinematics(tf::Vector3(x, y, z));
+
+		cout << xx[0] << " " << xx[1] << " " << xx[2] << endl;
+
+
+Make the robot frequency extremly slow and debug every single step and result
+
+
+//GOAL 2: Then add trajectory and check if walking pattern is ok
+//GOAL 3: Then add interpolation and check if that works fine
+//GOAL 4: Then start with random sampling
+
+
+//#include "gazebo_msgs/GetModelState.h"
+
+int i = 0;
+
+ros::NodeHandle n;
+
+	gazebo_msgs::GetModelState gazeboHexapod;
+	gazeboHexapod.request.model_name="hexapod";
+	ros::ServiceClient gazeboModelState = n.serviceClient<gazebo_msgs::GetModelState>("/gazebo/get_model_state");
+
+gazeboModelState.call(gazeboHexapod);
+
+float x = gazeboHexapod.response.pose.position.x;
+float y = gazeboHexapod.response.pose.position.y;
+float z = gazeboHexapod.response.pose.position.z;
+
+
+
+if(x < -0.2) {
+  cout << "Done" << endl;
+  break;
+}
+else {
+  cout << "test " << x << ", " << y << ", " << z <<endl;
+}
+
+/*i++;
+if(i == 15) {
+  cout << "Start walking in tripod gait" << endl;
+  akrobat.switchGait(1);
+  akrobat.updateMode(5.0, 0.0, 0.0);
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+listener.lookupTransform(
+	"/hexapod/" + std::to_string(i + 1) + "_coxa_link",
+	"/hexapod/" + std::to_string(i + 1) + "_femur_link",
+	ros::Time(0),
+	transformCoxaToFemur
+);
+
+listener.lookupTransform(
+	"/hexapod/" + std::to_string(i + 1) + "_femur_link",
+	"/hexapod/" + std::to_string(i + 1) + "_tibia_link",
+	ros::Time(0),
+	transformFemurToTibia
+);
+
+//Init angel values
+
+//TEST START
+ tf::Transform transform;
+ 
+ transform.setOrigin(
+	 tf::Vector3(
+		 transformFemurToTibia.getOrigin().x(),
+		 transformFemurToTibia.getOrigin().y(),
+		 transformFemurToTibia.getOrigin().z()
+	 )
+ );
+ 
+ tf::Quaternion q;
+ q.setRPY(0, 3.14, 0); //was -90 bzw. -1.570 before
+ transform.setRotation(q);
+ 
+ broadcaster.sendTransform(
+	 tf::StampedTransform(
+		 transform,
+		 ros::Time::now(),
+		 "/hexapod/" + std::to_string(i + 1) + "_femur_link",
+		 "/hexapod/" + std::to_string(i + 1) + "_tibia_link"
+	)
+);
+//TEST END
+
+
+
+
+
+
+
+
+
+
+
+#include <angles/angles.h>
+using namespace angles;
+
+
+//TEST PUNKT A
+tf::Transform a;
+tf::Quaternion rotationA;
+	
+a.setOrigin(tf::Vector3(-20, -40, -1));
+
+rotationA.setRPY(from_degrees(0), from_degrees(0), from_degrees(0));
+a.setRotation(rotationA);
+
+
+//TEST PUNKT B
+tf::Transform b;
+tf::Quaternion rotationB;
+	
+b.setOrigin(tf::Vector3(0, 0, 0));
+
+rotationB.setRPY(from_degrees(0), from_degrees(0), from_degrees(180));
+b.setRotation(rotationB);
+
+
+tf::Transform c = b * a;
+
+cout << "RESULT: " << c.getOrigin().x() << " " << c.getOrigin().y() << " " << c.getOrigin().z() << endl;
+
+
+
+
+
+
+
+
+
+
+/*double x;
+double y;
+double z;
+
+cout << "type x" << endl;
+cin >> x;
+cout << "type y" << endl;
+cin >> y;
+cout << "type z" << endl;
+cin >> z;
+
+cout << x << " " << y << " " << z << endl;		
+		
+std::vector<double> angles = akrobat.inverseKinematics(x,y,z,0);
+
+cout << "Result: " << angles[0] << " " << angles[1] << " " << angles[2] << endl;*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Get transform from coxa to foot
+tf::StampedTransform transformCoxaToFoot;
+
+listener.lookupTransform(
+	"/hexapod/" + std::to_string(i + 1) + "_coxa_link",
+	"/hexapod/" + std::to_string(i + 1) + "_foot_link",
+	ros::Time(0),
+	transformCoxaToFoot
+);
+
+// Add rotation of coxa to the transform
+tf::Transform rotationOfCoxa;
+
+tf::Quaternion rotation;
+rotation.setRPY(from_degrees(0), from_degrees(0), from_degrees(legSettings[i].rotationOfCoxa));
+
+rotationOfCoxa.setRotation(rotation);
+rotationOfCoxa.setOrigin(tf::Vector3(0, 0, 0));
+
+tf::Transform transformFinal = rotationOfCoxa * transformCoxaToFoot;
+
+// Add trajectory to the final transform
+tf::Transform transformFinalWithTrajectory;
+
+transformFinalWithTrajectory.setOrigin(
+	tf::Vector3(
+		//Wir müssen die Trajektorie auf einen fixen-Bein Wert adden, nicht auf einen dynamischen, d.h. wir müssen ein Default Bein Wert definieren - das sollte aber kein Problem sein glaube ich 
+		transformFinal.getOrigin().x(),// + legSettings[i].trajectory.x(),
+		transformFinal.getOrigin().y(),// + legSettings[i].trajectory.y(),
+		transformFinal.getOrigin().z(),// + legSettings[i].trajectory.z()
+	)
+);*/

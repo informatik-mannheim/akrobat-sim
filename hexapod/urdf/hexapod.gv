@@ -1,0 +1,80 @@
+digraph G {
+node [shape=box];
+"base" [label="base"];
+"hexapod_link" [label="hexapod_link"];
+"1_coxa_link" [label="1_coxa_link"];
+"1_femur_link" [label="1_femur_link"];
+"1_tibia_link" [label="1_tibia_link"];
+"1_foot_link" [label="1_foot_link"];
+"2_coxa_link" [label="2_coxa_link"];
+"2_femur_link" [label="2_femur_link"];
+"2_tibia_link" [label="2_tibia_link"];
+"2_foot_link" [label="2_foot_link"];
+"3_coxa_link" [label="3_coxa_link"];
+"3_femur_link" [label="3_femur_link"];
+"3_tibia_link" [label="3_tibia_link"];
+"3_foot_link" [label="3_foot_link"];
+"4_coxa_link" [label="4_coxa_link"];
+"4_femur_link" [label="4_femur_link"];
+"4_tibia_link" [label="4_tibia_link"];
+"4_foot_link" [label="4_foot_link"];
+"5_coxa_link" [label="5_coxa_link"];
+"5_femur_link" [label="5_femur_link"];
+"5_tibia_link" [label="5_tibia_link"];
+"5_foot_link" [label="5_foot_link"];
+"6_coxa_link" [label="6_coxa_link"];
+"6_femur_link" [label="6_femur_link"];
+"6_tibia_link" [label="6_tibia_link"];
+"6_foot_link" [label="6_foot_link"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"base" -> "base_to_hexapod_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"base_to_hexapod_joint" -> "hexapod_link"
+"hexapod_link" -> "m11" [label="xyz: -0.051 0.217 0 \nrpy: 0 -0 2.791"]
+"m11" -> "1_coxa_link"
+"1_coxa_link" -> "m12" [label="xyz: 0.07 0 0 \nrpy: 3.14 -0 0"]
+"m12" -> "1_femur_link"
+"1_femur_link" -> "m13" [label="xyz: 0.096 0 0 \nrpy: 0 -1.5708 0"]
+"m13" -> "1_tibia_link"
+"1_tibia_link" -> "1_foot_joint" [label="xyz: 0 0 -0.162 \nrpy: 0 -0 0"]
+"1_foot_joint" -> "1_foot_link"
+"hexapod_link" -> "m21" [label="xyz: 0.051 0.217 0 \nrpy: 0 -0 -2.79419"]
+"m21" -> "2_coxa_link"
+"2_coxa_link" -> "m22" [label="xyz: -0.07 0 0 \nrpy: 3.14159 0.00159265 3.14159"]
+"m22" -> "2_femur_link"
+"2_femur_link" -> "m23" [label="xyz: 0.096 0 0 \nrpy: 0 -1.5708 0"]
+"m23" -> "2_tibia_link"
+"2_tibia_link" -> "2_foot_joint" [label="xyz: 0 0 -0.162 \nrpy: 0 -0 0"]
+"2_foot_joint" -> "2_foot_link"
+"hexapod_link" -> "m31" [label="xyz: -0.051 0 0 \nrpy: 0 -0 3.14159"]
+"m31" -> "3_coxa_link"
+"3_coxa_link" -> "m32" [label="xyz: 0.07 0 0 \nrpy: 3.14 -0 0"]
+"m32" -> "3_femur_link"
+"3_femur_link" -> "m33" [label="xyz: 0.096 0 0 \nrpy: 0 -1.5708 0"]
+"m33" -> "3_tibia_link"
+"3_tibia_link" -> "3_foot_joint" [label="xyz: 0 0 -0.162 \nrpy: 0 -0 0"]
+"3_foot_joint" -> "3_foot_link"
+"hexapod_link" -> "m41" [label="xyz: 0.051 0 0 \nrpy: 0 -0 3.14159"]
+"m41" -> "4_coxa_link"
+"4_coxa_link" -> "m42" [label="xyz: -0.07 0 0 \nrpy: 3.14159 0.00159265 3.14159"]
+"m42" -> "4_femur_link"
+"4_femur_link" -> "m43" [label="xyz: 0.096 0 0 \nrpy: 0 -1.5708 0"]
+"m43" -> "4_tibia_link"
+"4_tibia_link" -> "4_foot_joint" [label="xyz: 0 0 -0.162 \nrpy: 0 -0 0"]
+"4_foot_joint" -> "4_foot_link"
+"hexapod_link" -> "m51" [label="xyz: -0.051 -0.217 0 \nrpy: 0 -0 -2.79419"]
+"m51" -> "5_coxa_link"
+"5_coxa_link" -> "m52" [label="xyz: 0.07 0 0 \nrpy: 3.14 -0 0"]
+"m52" -> "5_femur_link"
+"5_femur_link" -> "m53" [label="xyz: 0.096 0 0 \nrpy: 0 -1.5708 0"]
+"m53" -> "5_tibia_link"
+"5_tibia_link" -> "5_foot_joint" [label="xyz: 0 0 -0.162 \nrpy: 0 -0 0"]
+"5_foot_joint" -> "5_foot_link"
+"hexapod_link" -> "m61" [label="xyz: 0.051 -0.217 0 \nrpy: 0 -0 2.791"]
+"m61" -> "6_coxa_link"
+"6_coxa_link" -> "m62" [label="xyz: -0.07 0 0 \nrpy: 3.14159 0.00159265 3.14159"]
+"m62" -> "6_femur_link"
+"6_femur_link" -> "m63" [label="xyz: 0.096 0 0 \nrpy: 0 -1.5708 0"]
+"m63" -> "6_tibia_link"
+"6_tibia_link" -> "6_foot_joint" [label="xyz: 0 0 -0.162 \nrpy: 0 -0 0"]
+"6_foot_joint" -> "6_foot_link"
+}

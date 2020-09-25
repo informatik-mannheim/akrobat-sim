@@ -1,0 +1,5 @@
+<launch>
+	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find hexapod)/urdf/hexapod.xacro'"/>
+
+	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model hexapod -param robot_description -x 0.0 -y 0.0 -z 0.0 " />
+</launch>

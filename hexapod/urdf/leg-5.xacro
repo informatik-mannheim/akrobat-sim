@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<link name="5_coxa_link">
+		<visual>
+			<geometry>
+				<mesh filename="${stl_path}coxa_l_link.stl"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<material name="grey">
+				<color rgba="${color_grey}"/>
+			</material>
+		</visual>
+		<inertial>
+			<mass value="0.2"/>
+			<inertia ixx="4.99231E-05" ixy="7.69231E-08" ixz="0" iyy="4.83846E-05" iyz="0" izz="4.83846E-05"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<mesh filename="${stl_path}coxa_l_link.stl"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+		</collision>
+	</link>
+	<joint name="m51" type="revolute">
+		<parent link="hexapod_link"/>
+		<child link="5_coxa_link"/>
+		<origin xyz="-0.051 -0.217 0.0" rpy="0 0 3.489"/>
+		<axis xyz="0 0 1"/>
+		<limit effort="1000.0" lower="-0.548" upper="0.548" velocity="0.5"/>
+	</joint>
+	<link name="5_femur_link">
+		<visual>
+			<geometry>
+				<mesh filename="${stl_path}femur_link.stl"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<material name="grey">
+				<color rgba="${color_grey}"/>
+			</material>
+		</visual>
+		<inertial>
+			<mass value="0.2"/>
+			<inertia ixx="2.40946E-05" ixy="-1.00676E-06" ixz="-7.43243E-07" iyy="0.000142824" iyz="-6.75676E-09" izz="0.000150466"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<mesh filename="${stl_path}femur_link.stl"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+		</collision>
+	</link>
+	<joint name="m52" type="revolute">
+		<parent link="5_coxa_link"/>
+		<child link="5_femur_link"/>
+		<origin xyz="0.07 0.0 0.0" rpy="3.14 0 0"/>
+		<axis xyz="0 1 0"/>
+		<limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+	</joint>
+	<link name="5_tibia_link">
+		<visual>
+			<geometry>
+				<mesh filename="${stl_path}tibia_link.stl"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<material name="grey">
+				<color rgba="${color_grey}"/>
+			</material>
+		</visual>
+		<inertial>
+			<mass value="0.2"/>
+			<inertia ixx="0.000296304" ixy="-4.34783E-08" ixz="3.26087E-06" iyy="0.000265391" iyz="1.73913E-06" izz="4.22174E-05"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<mesh filename="${stl_path}tibia_link.stl"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+		</collision>
+	</link>
+	<joint name="m53" type="revolute">
+		<parent link="5_femur_link"/>
+		<child link="5_tibia_link"/>
+		<origin xyz="0.096 0.0 0.0" rpy="0 -1.57 0"/>
+		<axis xyz="0 1 0"/>
+		<limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+	</joint>
+	<link name="5_foot_link" />
+	<joint name="5_foot_joint" type="fixed">
+			<parent link="5_tibia_link" />
+			<child link="5_foot_link" />
+			<origin xyz="0 0.0 -0.162" rpy="0.0 0.0 0.0" />
+			<axis xyz="0 1 0"/>
+	</joint>
+	
+	<transmission name="m51_trans">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="m51">
+			<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="m51_motor">
+			<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<transmission name="m52_trans">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="m52">
+			<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="m52_motor">
+			<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<transmission name="m53_trans">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="m53">
+			<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="m53_motor">
+			<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+</robot>

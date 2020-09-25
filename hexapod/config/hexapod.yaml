@@ -1,0 +1,76 @@
+hexapod:
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 30
+  m11_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m11
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m12_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m12
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m13_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m13
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m21_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m21
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m22_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m22
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m23_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m23
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m31_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m31
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m32_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m32
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m33_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m33
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m41_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m41
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m42_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m42
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m43_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m43
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m51_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m51
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m52_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m52
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m53_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m53
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m61_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m61
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m62_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m62
+    pid: {p: 10.0, i: 0.0, d: 0}
+  m63_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: m63
+    pid: {p: 10.0, i: 0.0, d: 0}

@@ -1,0 +1,5 @@
+<launch>
+  <node name="akrobat" pkg="hexapod" type="akrobat" output="screen"></node>
+  <node name="jointstate_to_gazebo" pkg="hexapod" type="jointstate_to_gazebo"></node>
+
+</launch>
