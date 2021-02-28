@@ -1,30 +1,26 @@
 #include <akrobat/Akrobat.h>
-
 #define _USE_MATH_DEFINES
 #include <cmath>
-
 #include <fstream>
 #include <iostream>
 #include <string>
-
 #include <ros/ros.h>
 #include <angles/angles.h>
-
 #include <tf/tf.h>
 #include <tf/transform_datatypes.h>
 #include <tf/transform_listener.h>
 #include <tf/transform_broadcaster.h>
-
 #include <std_msgs/Float64.h>
 #include <sensor_msgs/JointState.h>
-
 #include <akrobat/akrobat_init.h>
+
 
 using namespace std;
 using namespace tf;
 using namespace ros;
 using namespace angles;
 
+//Setting up the akrobat publisher to publish joint states for gazebo on /goal_joint_states
 Akrobat::Akrobat() :
 	LENGTH_COXA(0.070),
 	LENGTH_FEMUR(0.096),
@@ -104,7 +100,7 @@ void Akrobat::runAkrobat()
 		bool isTrajectoryEmpty = trajectory.x() == 9999.0;
 
 		if(isTrajectoryEmpty && movementPosition > -1) {
-			std::cout << "recognized as done, skip" << std::endl;
+			//std::cout << "recognized as done, skip" << std::endl;
 			continue;
 		}
 		else if(isTrajectoryEmpty) {
@@ -166,7 +162,7 @@ void Akrobat::runAkrobat()
 		movementPosition++;
 	}
 	else {
-		cout << currentTick << endl;
+		//cout << currentTick << endl;
 		
 		currentTick++;
 		
@@ -178,6 +174,8 @@ void Akrobat::runAkrobat()
 	
 	jointPub.publish(js);
 }
+
+
 
 std::vector<double> Akrobat::inverseKinematics(const tf::Vector3& point) const
 {

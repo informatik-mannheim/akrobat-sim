@@ -45,7 +45,9 @@ int main(int argc, char** argv)
 
 	Subscriber subscriber;
 
-	nodeHandle->param<std::string>("goalNodeName", goalNodeName, "/goal_joint_states");
+	//	nodeHandle->param<std::string>("goalNodeName", goalNodeName, "/joint_states");
+		nodeHandle->param<std::string>("goalNodeName", goalNodeName, "/goal_joint_states");
+
 	nodeHandle->param<std::string>("dynamixelPrefix", dynamixelPrefix, "/dynamixel_controller/");
 	nodeHandle->param<int>("publish_frequency", publish_frequency, 20);
 

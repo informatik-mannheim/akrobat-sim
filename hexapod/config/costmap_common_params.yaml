@@ -1,0 +1,16 @@
+
+#---footprint--- (How big is the robot?)
+#---(in meters)---
+footprint: [ [-0.3,-0.38], [0.3,-0.38], [0.3,0.38], [-0.3,0.38] ] #hexapod mit länge 0.76m, breite 0.6m
+
+
+transform_tolerance: 0.4
+cost_scaling_factor: 3.0
+obstacle_range: 3.0
+raytrace_range: 3.5
+inflation_radius: 0.1 #how much space do we want to leave around the obstacles while the robot navigating
+
+map_type: costmap
+observation_sources: laser_scan_sensor
+laser_scan_sensor: {sensor_frame: hokuyo_link, data_type: LaserScan, topic: scan, marking: true, clearing: true}
+

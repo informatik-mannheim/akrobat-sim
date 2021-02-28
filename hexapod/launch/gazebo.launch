@@ -1,15 +1,71 @@
-<launch>
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find hexapod)/worlds/default.world"/>
-    <arg name="debug" value="false"/>
-    <arg name="gui" value="true"/>
-    <arg name="paused" value="false"/>
-    <arg name="use_sim_time" value="true"/>
-    <arg name="headless" value="false"/>
-  </include>
+<?xml version="1.0" encoding="UTF-8"?>
 
-  <include file="$(find hexapod)/launch/model.launch"/>
-  <include file="$(find hexapod)/launch/control.launch"/>
-  
-  <include file="$(find hexapod)/launch/akrobat_walk.launch"/>
+<launch>
+	
+		<!-- Arguments -->
+	<arg name="open_rviz" default="true"/>
+	<!-- Defining robot model == hexapod -->
+	<param name="robot_description" command="$(find xacro)/xacro '$(find hexapod)/hexapod_description/urdf/hexapod.xacro'"/>
+	<arg name="x" default="0"/>
+	<arg name="y" default="0"/>
+	<arg name="z" default="0"/>
+
+
+	  <!-- Launch Gazebo World -->
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="world_name" value="$(find hexapod)/hexapod_gazebo/worlds/myWorld.world"/>
+		<arg name="debug" value="false"/>
+		<arg name="gui" value="true"/>
+		<arg name="paused" value="true"/>
+		<arg name="use_sim_time" value="true"/>
+		<arg name="headless" value="false"/>        
+		<!--   <arg name="headless" will output all info about robot activity -->
+        <!--   <arg name="verbose" value="true"/> will output Info about missing gazebo models-->
+	</include>
+	
+		
+    <!-- Spawn the robot model -->
+	<node 
+		name="urdf_spawner" 
+		pkg="gazebo_ros" 
+		type="spawn_model" 
+		respawn="false" 
+		output="screen" 
+		args="-urdf -model hexapod -param robot_description -x $(arg x) -y $(arg y) -z $(arg z)" />
+
+	<!-- Load joint controllers -->
+	<rosparam command="load" file="$(find hexapod)/config/hexapod.yaml" />
+	
+	<!-- Combine joint values: robot_state_publisher node is subscribed to topic /joint_state and publishes info on topic /tf. This robot_state_publisher_hexapod reroutes subscribed topic to /hexapod/joint_states in order to get real values updated from /gazebo node to tf and rviz during simulation/ convert joint states to TF transforms for rviz, etc-->
+	<node name="robot_state_publisher_hexapod" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+		<remap from="/joint_states" to="/hexapod/joint_states"/>
+	</node>
+
+	<!-- Launchig joint state controller and Akrobat joint controllers -->
+	<node
+		name="controller_spawner"
+		pkg="controller_manager"
+		type="spawner"
+		respawn="false"
+		output="screen"
+		ns="/hexapod"
+		args="joint_state_controller m11_position_controller m12_position_controller m13_position_controller m21_position_controller m22_position_controller m23_position_controller m31_position_controller m32_position_controller m33_position_controller m41_position_controller m42_position_controller m43_position_controller m51_position_controller m52_position_controller m53_position_controller m61_position_controller m62_position_controller m63_position_controller">	
+	</node>
+
+	 <!--TF transform transforms odom data to tf, so that robot movement in rviz will be shown with respect to frame:world (not to frame:base_link)-->
+	<node name="odom_to_tf" pkg="message_to_tf" type="message_to_tf" args="odom"> </node>
+
+    <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0 0 0 -1.57 0 0 base_link hokuyo_link 100" />
+
+	<!-- Launchig Akrobat walk -->
+	<node name="akrobat" pkg="hexapod" type="akrobat" output="screen"></node>
+
+	<!-- Launching joint state to gazebo publisher -->
+	<node name="jointstate_to_gazebo" pkg="hexapod" type="jointstate_to_gazebo"></node>
+
+	<!-- Load Rviz node , gets joint info because it is subscribed to topic /tf -->
+	 <group if="$(arg open_rviz)"> 
+	 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find hexapod)/config/config.rviz" />
+ 	</group>
+
 </launch>

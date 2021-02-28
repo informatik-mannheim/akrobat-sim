@@ -12,8 +12,9 @@
 #include <tf/transform_broadcaster.h>
 
 #include <sensor_msgs/JointState.h>
-
+#include <std_msgs/String.h>
 #include <akrobat/LegSetting.h>
+#include <geometry_msgs/Twist.h>
 
 class Akrobat
 {
@@ -44,7 +45,6 @@ public:
 	int movementPosition = -10;
 	int currentTick = 1;
 	int maxTicks = 8;
-
 	LegSetting legSettings[numberOfLegs];
 	
 	sensor_msgs::JointState js;
@@ -71,8 +71,9 @@ public:
 	bool anglesValid(int legNum, std::vector<double> angles) const;
 	static bool IsWithinLimits(const double& value, const double& min, const double& max);
 	
-	ros::Publisher jointPub;
 
+	ros::Publisher jointPub;
+	ros::Subscriber moveSub;
 private:
 	ros::NodeHandle n;
 };

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<macro name="leg_joint_revolute" params="name parent child  origin_rpy origin_xyz axis_xyz limit_effort limit_lower limit_upper limit_velocity">
+		<joint name="${name}" type="revolute">
+			<parent link="${parent}"/>
+			<child link="${child}"/>
+			<origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+			<axis xyz="${axis_xyz}"/>
+			<limit effort="${limit_effort}" lower="${limit_lower}" upper="${limit_upper}" velocity="${limit_velocity}"/> 
+		</joint>
+		<transmission name="${name}_trans">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="${name}">
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="${name}_motor">
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+	</macro>
+
+	<macro name="foot_joint_fixed" params="name parent child ">
+		<joint name="${name}" type="fixed">
+			<parent link="${parent}"/>
+			<child link="${child}"/>
+			<origin xyz="0 0.0 -0.162" rpy="0.0 0.0 0.0"/>
+			<axis xyz="0 1 0"/>
+		</joint>
+	</macro>
+
+	<macro name="leg_part_link" params="name mesh_filename inertia_ixx inertia_ixy inertia_ixz inertia_iyy inertia_iyz inertia_izz">
+		<link name="${name}">
+		<visual>
+			<geometry>
+				<mesh filename="${mesh_filename}"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<material name="${material_name}"/>
+		</visual>
+		<inertial>
+			<mass value="0.2"/>
+			<inertia ixx="${inertia_ixx}" ixy="${inertia_ixy}" ixz="${inertia_ixz}" iyy="${inertia_iyy}" iyz="${inertia_iyz}" izz="${inertia_izz}"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<mesh filename="${mesh_filename}"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+		</collision>
+	</link>
+	</macro>
+
+</robot>

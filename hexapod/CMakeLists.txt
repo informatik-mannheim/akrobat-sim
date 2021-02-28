@@ -1,9 +1,14 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 2.6)
 project(hexapod)
 
 find_package(PythonLibs 2.7)
+find_package(PCL 1.3 REQUIRED COMPONENTS common io)
 
 find_package(catkin REQUIRED COMPONENTS
+  urdf
+  controller_manager
+  joint_state_controller
+  robot_state_publisher
   roscpp
   std_msgs
   tf
@@ -22,6 +27,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
+
 
 add_executable(akrobat src/akrobat/akrobat_main.cpp src/akrobat/Akrobat.cpp src/akrobat/ControlRandomSampling.cpp src/akrobat/FootConfiguration.cpp src/akrobat/LegSetting.cpp src/akrobat/Trajectory.cpp src/pugixml/pugixml.cpp)
 

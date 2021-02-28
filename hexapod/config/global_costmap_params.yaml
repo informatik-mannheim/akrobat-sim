@@ -1,0 +1,7 @@
+global_costmap:
+  global_frame: map #sollte map sein ,default: /map
+  robot_base_frame: base_link #sollte base_link sein (base_footprint des Roboters), default: base_link
+  update_frequency: 1.0
+  static_map: true
+  transform_tolerance: 0.5
+  

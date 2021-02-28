@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <launch>
+    <!-- Arguments -->
+    <arg name="map_file" default="$(find hexapod)/hexapod_mapping/map.yaml"/>
+
+    <!-- Map server -->
+    <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+    
+    <!--Static transform publisher to transform map frame to world frame, so that amcl and move_base can communicate correctly -->
+    <node pkg="tf" type="static_transform_publisher" name="map_to_world_static_tf" args="0 0 0 0 0 0 world map  100" />
+
+    <!--AMCL -->
+    <include file="$(find hexapod)/launch/amcl.launch"/>
+
+    <!-- move_base -->
+    <include file="$(find hexapod)/launch/move_base.launch"/>
+  </launch>

@@ -1,8 +1,6 @@
 #include <vector>
 #include <string>
-
 #include "ros/ros.h"
-
 #include <std_msgs/Float64.h>
 #include <sensor_msgs/JointState.h>
 
@@ -22,7 +20,7 @@ void goalJointStateCallback(const sensor_msgs::JointState::ConstPtr& msg)
 	{
 		for (int i = 0; i < msg->name.size(); i++)
 		{
-			publishers.push_back(nodeHandle->advertise<std_msgs::Float64>(gazeboPrefix + msg->name[i] + "_position_controller/command", 1));
+			publishers.push_back(nodeHandle->advertise<std_msgs::Float64>(gazeboPrefix + msg->name[i] + "_position_controller/command", 1)); //Gazebo hört auf _position_controller_command
 		}
 	}
 

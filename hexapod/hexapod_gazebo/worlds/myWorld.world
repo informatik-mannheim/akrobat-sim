@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="myWorld">
+<include>
+      <uri>model://ground_plane</uri>
+    </include>
+ <gravity>0 0 -9.81</gravity>
+
+<!-- Global light source -->
+   <include>
+      <uri>model://sun</uri>
+    </include>
+
+
+  <!-- BRICK WALLS -->
+<include>
+      <uri>model://brick_wall</uri>
+      <name>wall1</name>
+      <pose>0 -2.5 0 0 0 0</pose>
+    </include>
+<include>
+      <uri>model://brick_wall</uri>
+      <name>wall2</name>
+      <pose>0 2.5 0 0 0 0</pose>
+    </include>
+
+<!-- ORANGE POLES -->
+    <include>
+      <uri>model://orange_pole</uri>
+      <name>orange_pole1</name>
+      <pose>-1.5 -1.2 0 0 0 0</pose>
+    </include>
+<include>
+      <uri>model://orange_pole</uri>
+      <name>orange_pole2</name>
+      <pose>0 -1.2 0 0 0 0</pose>
+    </include>
+ <include>
+      <uri>model://orange_pole</uri>
+      <name>orange_pole3</name>
+      <pose>-1.5 1.2 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://orange_pole</uri>
+      <name>orange_pole4</name>
+      <pose>1.5 -1.2 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://orange_pole</uri>
+      <name>orange_pole5</name>
+      <pose>1.5 1.5 0 0 0 0</pose>
+    </include>
+ 
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>-0.1414 4.5261 8.762 0.000003 1.059643 -1.566994</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+  </world>
+</sdf>

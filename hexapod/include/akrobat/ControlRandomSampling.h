@@ -19,9 +19,17 @@ public:
   ControlRandomSampling(Akrobat& akrobat);
   
   std::vector<std::vector<tf::Vector3>> readMovement() const;
+  
+
   void exportMovement(std::vector<std::vector<tf::Vector3>>& footPoints) const;
   
   void tripodGait() const;
+  void forwardMovement() const;
+  void stopMovement() const;
+  void backwardMovement() const;
+  void leftTurn() const;
+  void rightTurn() const;
+  
   void randomSampling();
   bool generateRandomSampling();
   

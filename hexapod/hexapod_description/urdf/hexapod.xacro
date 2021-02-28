@@ -1,0 +1,347 @@
+<?xml version="1.0"?>
+<robot name="hexapod" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Params for robot description and other constants -->
+	<xacro:property name="stl_path" value="package://hexapod/hexapod_description/meshes/hexapod_stl/"/>
+	<xacro:property name="hokuyo" value="package://hexapod/hexapod_description/meshes/hokuyo.dae"/>
+	<xacro:property name="material_name" value="orange"/>
+	<xacro:property name="world_base_link_name" value="base_link"/>
+	<xacro:property name="robot_base_link_name" value="hexapod_link"/>
+  	<xacro:property name="PI" value="3.1415926535897931"/>
+ 
+ <!-- Import Rviz colors -->
+    <xacro:include filename="$(find hexapod)/hexapod_description/urdf/materials.rviz.xacro" /> 
+
+  <!-- Import all Gazebo elements, including Gazebo colors --> 
+   	<xacro:include filename="$(find hexapod)/hexapod_description/urdf/gazebo.plugins.xacro" />
+   	<xacro:include filename="$(find hexapod)/hexapod_description/urdf/laser.xacro" />
+
+  <!-- Macro for creating links, joints (including transmissions) -->
+	<xacro:include filename="$(find hexapod)/hexapod_description/urdf/links_joints.xacro"/>
+
+
+ <!-- START of robot description -->
+
+<!-- This creates base link. Used for fixing robot to Gazebo 'base_link'  -->
+	<link name="${world_base_link_name}"/>
+
+<!-- This creates joint to connect hexapod link to base_link --> 
+	<joint name="${world_base_link_name}_to_hexapod_joint" type="fixed">
+		<parent link="${world_base_link_name}"/>
+		<child link="${robot_base_link_name}"/>
+	</joint>
+
+<!-- This creates hexapod link (Robot's Base Link)  -->
+	<link name="${robot_base_link_name}">
+		<visual>
+			<geometry>
+				<mesh filename="${stl_path}hexapod_link.stl"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<material name="${material_name}"/>
+		</visual>
+		<inertial>
+			<mass value="0.2"/>
+			<inertia ixx="0.006783591" ixy="0" ixz="-9.71292E-07" iyy="0.000361804" iyz="-1.57895E-05" izz="0.007021976"/>
+		</inertial>
+		<collision>
+			<geometry>
+				<mesh filename="${stl_path}hexapod_link.stl"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+		</collision>
+	</link>
+
+
+<!-- macros create leg links and joints, to connect legs links to hexapod link -->
+
+<!-- Creating Leg_1 links and joints/transmissions -->
+	<leg_part_link 
+		name="1_coxa_link"
+		mesh_filename="${stl_path}coxa_l_link.stl"
+		inertia_ixx="4.99231E-05" inertia_ixy="7.69231E-08" inertia_ixz="0" inertia_iyy="4.83846E-05" inertia_iyz="0" inertia_izz="4.83846E-05"/>
+
+	<leg_joint_revolute 
+		name="m11" 
+		parent ="hexapod_link"
+		child ="1_coxa_link"
+		origin_xyz="-0.051 0.217 0.0" origin_rpy="0 0 2.791"
+		axis_xyz="0 0 1"
+		limit_effort="1000.0" limit_lower="-3.14" limit_upper="3.14" limit_velocity="0.5"/> <!--lower="-0.548" upper="0.548" -->
+	
+	<leg_part_link 
+		name="1_femur_link"
+		mesh_filename="${stl_path}femur_link.stl"
+		inertia_ixx="2.40946E-05" inertia_ixy="-1.00676E-06" inertia_ixz="-7.43243E-07" inertia_iyy="0.000142824" inertia_iyz="-6.75676E-09" inertia_izz="0.000150466"/>
+	
+	<leg_joint_revolute 
+		name="m12"
+		parent="1_coxa_link"
+		child="1_femur_link"
+		origin_xyz="0.07 0.0 0.0" origin_rpy="3.14 0 0" 
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-3.14" limit_upper="3.14" limit_velocity="0.5"/> <!-- lower="-1.57" upper="1.57" -->
+	
+	<leg_part_link 
+		name="1_tibia_link"
+		mesh_filename="${stl_path}tibia_link.stl"
+		inertia_ixx="0.000296304" inertia_ixy="-4.34783E-08" inertia_ixz="3.26087E-06" inertia_iyy="0.000265391" inertia_iyz="1.73913E-06" inertia_izz="4.22174E-05"/>
+
+	<leg_joint_revolute 
+		name="m13" 
+		parent ="1_femur_link"
+		child ="1_tibia_link"
+		origin_xyz="0.096 0.0 0.0" origin_rpy="0 -1.57 0"
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-3.14" limit_upper="3.14" limit_velocity="0.5"/> <!-- lower="-1.57" upper="1.57" -->
+
+	<link name="1_foot_link" />
+	
+	<foot_joint_fixed 
+		name="1_foot_joint" 
+		parent="1_tibia_link" 
+		child="1_foot_link"/>
+<!-- END of Leg_1 -->
+
+<!-- Creating Leg_2 links and joints/transmissions -->
+	<leg_part_link 
+		name="2_coxa_link"
+		mesh_filename="${stl_path}coxa_r_link.stl"
+		inertia_ixx="4.99231E-05" inertia_ixy="7.69231E-08" inertia_ixz="0" inertia_iyy="4.83846E-05" inertia_iyz="0" inertia_izz="4.83846E-05"/>
+
+	<leg_joint_revolute 
+		name="m21"
+		parent ="hexapod_link"
+		child ="2_coxa_link"
+		origin_xyz="0.051 0.217 0.0" origin_rpy="0 0 3.489"
+		axis_xyz="0 0 1"
+		limit_effort="1000.0" limit_lower="-3.14" limit_upper="3.14" limit_velocity="0.5"/> <!-- lower="-0.548" upper="0.548" -->
+
+	<leg_part_link 
+		name="2_femur_link"
+		mesh_filename="${stl_path}femur_link.stl"
+		inertia_ixx="2.40946E-05" inertia_ixy="-1.00676E-06" inertia_ixz="-7.43243E-07" inertia_iyy="0.000142824" inertia_iyz="-6.75676E-09" inertia_izz="0.000150466"/>
+
+	<leg_joint_revolute 
+		name="m22" 
+		parent ="2_coxa_link"
+		child ="2_femur_link"
+		origin_xyz="-0.07 0.0 0.0" origin_rpy="0 3.14 0"
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-3.14" limit_upper="3.14" limit_velocity="0.5"/> <!-- lower="-1.57" upper="1.57" -->
+
+	<leg_part_link 
+		name="2_tibia_link"
+		mesh_filename="${stl_path}tibia_link.stl"
+		inertia_ixx="0.000296304" inertia_ixy="-4.34783E-08" inertia_ixz="3.26087E-06" inertia_iyy="0.000265391" inertia_iyz="1.73913E-06" inertia_izz="4.22174E-05"/>
+
+	<leg_joint_revolute 
+		name="m23" 
+		parent ="2_femur_link"
+		child ="2_tibia_link"
+		origin_xyz="0.096 0.0 0.0" origin_rpy="0 -1.57 0"
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-3.14" limit_upper="3.14" limit_velocity="0.5"/> <!-- lower="-1.57" upper="1.57" -->
+
+	<link name="2_foot_link" />
+
+	<foot_joint_fixed 
+		name="2_foot_joint" 
+		parent ="2_tibia_link" 
+		child ="2_foot_link"/>
+<!-- END of Leg_2 -->
+
+<!-- Creating Leg_3 links and joints/transmissions -->
+	<leg_part_link 
+		name="3_coxa_link"
+		mesh_filename="${stl_path}coxa_l_link.stl"
+		inertia_ixx="4.99231E-05" inertia_ixy="7.69231E-08" inertia_ixz="0" inertia_iyy="4.83846E-05" inertia_iyz="0" inertia_izz="4.83846E-05"/>
+	
+	<leg_joint_revolute 
+		name="m31" 
+		parent ="hexapod_link"
+		child ="3_coxa_link"
+		origin_xyz="-0.051 0.0 0.0" origin_rpy="0 0 3.1415926"
+		axis_xyz="0 0 1"
+		limit_effort="1000.0" limit_lower="-0.548" limit_upper="0.548" limit_velocity="0.5"/>
+	
+	<leg_part_link 
+		name="3_femur_link"
+		mesh_filename="${stl_path}femur_link.stl"
+		inertia_ixx="2.40946E-05" inertia_ixy="-1.00676E-06" inertia_ixz="-7.43243E-07" inertia_iyy="0.000142824" inertia_iyz="-6.75676E-09" inertia_izz="0.000150466"/>
+	
+	<leg_joint_revolute 
+		name="m32" 
+		parent ="3_coxa_link"
+		child ="3_femur_link"
+		origin_xyz="0.07 0.0 0.0" origin_rpy="3.14 0 0"
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-1.57" limit_upper="1.57" limit_velocity="0.5"/>
+	
+	<leg_part_link 
+		name="3_tibia_link"
+		mesh_filename="${stl_path}tibia_link.stl"
+		inertia_ixx="0.000296304" inertia_ixy="-4.34783E-08" inertia_ixz="3.26087E-06" inertia_iyy="0.000265391" inertia_iyz="1.73913E-06" inertia_izz="4.22174E-05"/>
+	
+	<leg_joint_revolute 
+		name="m33" 
+		parent ="3_femur_link"
+		child ="3_tibia_link"
+		origin_xyz="0.096 0.0 0.0" origin_rpy="0 -1.57 0"
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-1.57" limit_upper="1.57" limit_velocity="0.5"/>
+
+	<link name="3_foot_link" />
+
+	<foot_joint_fixed 
+		name="3_foot_joint" 
+		parent ="3_tibia_link" 
+		child ="3_foot_link"/>
+<!-- END of Leg_3 -->
+
+<!-- Creating Leg_4 links and joints/transmissions -->
+	<leg_part_link 
+		name="4_coxa_link"
+		mesh_filename="${stl_path}coxa_r_link.stl"
+		inertia_ixx="4.99231E-05" inertia_ixy="7.69231E-08" inertia_ixz="0" inertia_iyy="4.83846E-05" inertia_iyz="0" inertia_izz="4.83846E-05"/>
+
+	<leg_joint_revolute 
+		name="m41" 
+		parent ="hexapod_link"
+		child ="4_coxa_link"
+		origin_xyz="0.051 0.0 0.0" origin_rpy="0 0 3.1415926"
+		axis_xyz="0 0 1"
+		limit_effort="1000.0" limit_lower="-0.548" limit_upper="0.548" limit_velocity="0.5"/>
+
+	<leg_part_link 
+		name="4_femur_link"
+		mesh_filename="${stl_path}femur_link.stl"
+		inertia_ixx="2.40946E-05" inertia_ixy="-1.00676E-06" inertia_ixz="-7.43243E-07" inertia_iyy="0.000142824" inertia_iyz="-6.75676E-09" inertia_izz="0.000150466"/>
+
+	<leg_joint_revolute 
+		name="m42" 
+		parent ="4_coxa_link"
+		child ="4_femur_link"
+		origin_xyz="-0.07 0.0 0.0" origin_rpy="0 3.14 0"
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-1.57" limit_upper="1.57" limit_velocity="0.5"/>
+
+	<leg_part_link 
+		name="4_tibia_link"
+		mesh_filename="${stl_path}tibia_link.stl"
+		inertia_ixx="0.000296304" inertia_ixy="-4.34783E-08" inertia_ixz="3.26087E-06" inertia_iyy="0.000265391" inertia_iyz="1.73913E-06" inertia_izz="4.22174E-05"/>
+
+	<leg_joint_revolute 
+		name="m43" 
+		parent ="4_femur_link"
+		child ="4_tibia_link"
+		origin_xyz="0.096 0.0 0.0" origin_rpy="0 -1.57 0"
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-1.57" limit_upper="1.57" limit_velocity="0.5"/>
+
+	<link name="4_foot_link" />
+
+	<foot_joint_fixed 
+		name="4_foot_joint" 
+		parent ="4_tibia_link" 
+		child ="4_foot_link"/>
+<!-- END of Leg_4 -->
+
+<!-- Creating Leg_5 links and joints/transmissions -->
+	<leg_part_link 
+		name="5_coxa_link"
+		mesh_filename="${stl_path}coxa_l_link.stl"
+		inertia_ixx="4.99231E-05" inertia_ixy="7.69231E-08" inertia_ixz="0" inertia_iyy="4.83846E-05" inertia_iyz="0" inertia_izz="4.83846E-05"/>
+
+	<leg_joint_revolute 
+		name="m51" 
+		parent ="hexapod_link"
+		child ="5_coxa_link"
+		origin_xyz="-0.051 -0.217 0.0" origin_rpy="0 0 3.489"
+		axis_xyz="0 0 1"
+		limit_effort="1000.0" limit_lower="-0.548" limit_upper="0.548" limit_velocity="0.5"/>
+
+	<leg_part_link
+		name="5_femur_link"
+		mesh_filename="${stl_path}femur_link.stl"
+		inertia_ixx="2.40946E-05" inertia_ixy="-1.00676E-06" inertia_ixz="-7.43243E-07" inertia_iyy="0.000142824" inertia_iyz="-6.75676E-09" inertia_izz="0.000150466"/>
+	
+	<leg_joint_revolute 
+		name="m52" 
+		parent ="5_coxa_link"
+		child ="5_femur_link"
+		origin_xyz="0.07 0.0 0.0" origin_rpy="3.14 0 0"
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-1.57" limit_upper="1.57" limit_velocity="0.5"/>
+
+	<leg_part_link 
+		name="5_tibia_link"
+		mesh_filename="${stl_path}tibia_link.stl"
+		inertia_ixx="0.000296304" inertia_ixy="-4.34783E-08" inertia_ixz="3.26087E-06" inertia_iyy="0.000265391" inertia_iyz="1.73913E-06" inertia_izz="4.22174E-05"/>
+
+	<leg_joint_revolute 
+		name="m53" 
+		parent ="5_femur_link"
+		child ="5_tibia_link"
+		origin_xyz="0.096 0.0 0.0" origin_rpy="0 -1.57 0"
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-1.57" limit_upper="1.57" limit_velocity="0.5"/>
+
+	<link name="5_foot_link"/>
+
+	<foot_joint_fixed 
+		name="5_foot_joint" 
+		parent ="5_tibia_link" 
+		child ="5_foot_link"/>
+<!-- END of Leg_5 -->
+
+<!-- Creating Leg_6 links and joints/transmissions -->
+	<leg_part_link 
+		name="6_coxa_link"
+		mesh_filename="${stl_path}coxa_r_link.stl"
+		inertia_ixx="4.99231E-05" inertia_ixy="7.69231E-08" inertia_ixz="0" inertia_iyy="4.83846E-05" inertia_iyz="0" inertia_izz="4.83846E-05"/>
+
+	<leg_joint_revolute 
+		name="m61" 
+		parent ="hexapod_link"
+		child ="6_coxa_link"
+		origin_xyz="0.051 -0.217 0.0" origin_rpy="0 0 2.791"
+		axis_xyz="0 0 1"
+		limit_effort="1000.0" limit_lower="-0.548" limit_upper="0.548" limit_velocity="0.5"/>
+	
+	<leg_part_link 
+		name="6_femur_link"
+		mesh_filename="${stl_path}femur_link.stl"
+		inertia_ixx="2.40946E-05" inertia_ixy="-1.00676E-06" inertia_ixz="-7.43243E-07" inertia_iyy="0.000142824" inertia_iyz="-6.75676E-09" inertia_izz="0.000150466"/>
+
+	<leg_joint_revolute 
+		name="m62" 
+		parent ="6_coxa_link"
+		child ="6_femur_link"
+		origin_xyz="-0.07 0.0 0.0" origin_rpy="0 3.14 0"
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-1.57" limit_upper="1.57" limit_velocity="0.5"/>
+	
+	<leg_part_link 
+		name="6_tibia_link"
+		mesh_filename="${stl_path}tibia_link.stl"
+		inertia_ixx="0.000296304" inertia_ixy="-4.34783E-08" inertia_ixz="3.26087E-06" inertia_iyy="0.000265391" inertia_iyz="1.73913E-06" inertia_izz="4.22174E-05"/>
+
+	<leg_joint_revolute 
+		name="m63" 
+		parent ="6_femur_link"
+		child ="6_tibia_link"
+		origin_xyz="0.096 0.0 0.0" origin_rpy="0 -1.57 0"
+		axis_xyz="0 1 0"
+		limit_effort="1000.0" limit_lower="-1.57" limit_upper="1.57" limit_velocity="0.5"/>
+
+	<link name="6_foot_link" />
+
+	<foot_joint_fixed 
+		name="6_foot_joint" 
+		parent ="6_tibia_link" 
+		child ="6_foot_link"/>
+	<!-- END of Leg_6 -->
+
+<!-- END of robot desription -->
+
+</robot>

@@ -2,11 +2,11 @@
 	<name>hexapod</name>
 	<version>0.0.1</version>
 	<description>hexapod</description>
-	<maintainer email="daniel.koch@dakitec.de">Daniel Koch</maintainer>
+	<maintainer email="marina.h88@gmx.de">Marina Hovhannisyan</maintainer>
 
 	<license>BSD</license>
 
-	<author email="daniel.koch@dakitec.de">Daniel Koch</author>
+	<author email="marina.h88@gmx.de">Marina Hovhannisyan</author>
 
 	<buildtool_depend>catkin</buildtool_depend>
 
@@ -15,12 +15,20 @@
 	<build_depend>std_msgs</build_depend>
 	<build_depend>tf</build_depend>
 	<build_depend>gazebo_msgs</build_depend>
+	<build_depend>urdf</build_depend>
+	<build_depend>controller_manager</build_depend>
+	<build_depend>joint_state_controller</build_depend>
+	<build_depend>robot_state_publisher</build_depend>
 
 	<run_depend>roscpp</run_depend>
 	<run_depend>rospy</run_depend>
 	<run_depend>std_msgs</run_depend>
 	<run_depend>tf</run_depend>
 	<run_depend>gazebo_msgs</run_depend>
+	<run_depend>urdf</run_depend>
+	<run_depend>controller_manager</run_depend>
+	<run_depend>joint_state_controller</run_depend>
+	<run_depend>robot_state_publisher</run_depend>
 
 	<export></export>
 </package>
